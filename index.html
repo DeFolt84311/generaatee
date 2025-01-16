@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nickname Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #000;
+            color: #ffcc00;
+            margin: 0;
+            padding: 50px;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            background-color: #ffcc00;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #e6b800;
+        }
+        #nickname {
+            margin-top: 20px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        #copyButton {
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Nickname Generator</h1>
+    <button onclick="generateNickname()">Generate Nickname</button>
+    <p id="nickname"></p>
+    <button id="copyButton" onclick="copyNickname()">Copy Nickname</button>
+ 
+    <script>
+        const adjectives = [
+            "Fierce", "Silent", "Swift", "Cunning", "Noble",
+"Bold", "Dark", "Shining", "Mighty", "Ancient",
+"Raging", "Fearless", "Savage", "Mystic", "Iron",
+"Stormy", "Vengeful", "Lonely", "Starlit", "Sly",
+"Furious", "Brave", "Daring", "Epic", "Wild",
+"Calm", "Dreamy", "Frosty", "Golden", "Cheerful",
+"Eager", "Gentle", "Haunting", "Joyful", "Majestic",
+"Naughty", "Proud", "Radiant", "Spirited", "Tender",
+"Vibrant", "Witty", "Zealous", "Aggressive", "Bouncing",
+"Charming", "Determined", "Ethereal", "Fearsome", "Gritty",
+"Harmonious", "Intrepid", "Jubilant", "Keen", "Loyal",
+"Mysterious", "Notorious", "Optimistic", "Perilous", "Quirky",
+"Robust", "Sassy", "Tenacious", "Uniform", "Vengeful",
+"Whimsical", "Zany", "Abyssal", "Brilliant", "Courageous",
+"Delicate", "Endless", "Famous", "Gracious", "Horrific",
+"Imposing", "Jaded", "Kooky", "Luminous", "Monstrous",
+"Notable", "Outstanding", "Primal", "Quaint", "Radical",
+"Spectacular", "Transcendent", "Uplifted", "Vibrant", "Wondrous",
+"Artistic", "Benevolent", "Chaotic", "Dynamic", "Enchanting",
+"Ferocious", "Glad", "Hasty", "Irresponsible", "Juvenile",
+"Kind", "Luminous", "Morbid", "Nostalgic", "Oblivious",
+"Perplexing", "Qualitative", "Rustic", "Synchronized", "Thrilling",
+"Utopian", "Vulgar", "Wistful", "Xenophobic", "Yearning",
+"Aggressive", "Bitter", "Cynical", "Dull", "Energetic",
+"Flamboyant", "Gleeful", "Harsh", "Impressive", "Joyless",
+"Kind-hearted", "Lively", "Melancholic", "Nurturing", "Optimistic",
+"Passionate", "Quiet", "Rambunctious", "Serene", "Turbulent",
+"Unruly", "Valiant", "Wary", "Zealous", "Adventurous",
+"Bratty", "Competitive", "Daring", "Enchanting", "Funky",
+"Generous", "Honest", "Irresolute", "Jovial", "Knowledgeable",
+"Logical", "Motivated", "Noble", "Outgoing", "Perceptive",
+"Quaint", "Reliable", "Solemn", "Tactical", "Understated",
+"Vivid", "Witty", "Zesty", "Audacious", "Beaming",
+"Clever", "Diffident", "Egotistical", "Flamboyant", "Gregarious",
+"Humble", "Impartial", "Juicy", "Keen", "Lovable",
+"Meticulous", "Nervous", "Optimistic", "Pristine", "Quizzical",
+"Righteous", "Spontaneous", "Tremendous", "Uncertain", "Vivacious",
+"Wholesome", "Youthful", "Zealous", "Anxious", "Benevolent",
+"Courageous", "Discreet", "Effervescent", "Formidable", "Gutsy",
+"Happy", "Immaculate", "Joyful", "Kooky", "Lethargic",
+"Magical", "Naive", "Obstinate", "Pensive", "Quiescent",
+"Raucous", "Sincere", "Tenacious", "Unique", "Versatile",
+"Whimsical", "Xerophytic", "Yielding", "Zealous", "Arrogant",
+"Brave", "Challenging", "Delightful", "Empowered", "Fabulous",
+"Grumpy", "Harmonious", "Imperial", "Judicious", "Keen",
+"Limitless", "Mystical", "Nimble", "Optimistic", "Perplexing",
+"Quixotic", "Relentless", "Sleek", "Translucent", "Upscale",
+"Venerated", "Wry", "Zany", "Attentive", "Boorish",
+"Candid", "Dramatic", "Effective", "Fulfilling", "Gracious",
+"Hectic", "Influential", "Juvenile", "Kinetic", "Luminous",
+"Melodramatic", "Nurturing", "Opulent", "Plucky", "Quincentennial",
+"Rebellious", "Soulful", "Tame", "Unyielding", "Vagabond",
+"White-hot", "Xenophobic", "Young-at-heart", "Zippy", "Adorable",
+"Brisk", "Cynical", "Driven", "Experimental", "Funky",
+"Gallant", "Hairy", "Impeccable", "Jinxed", "Kooky",
+"Loyal", "Mischievous", "Naughty", "Unpopular", "Vivacious",
+"Wild", "Xanthous", "Yellowish", "Zego", "Adventurous",
+"Brash", "Creative", "Distant", "Eager", "Fearless",
+"Glorious", "Harmonious", "Innocent", "Just", "Kind-hearted",
+"Lively", "Magnetizing", "Nuanced", "Optimistic", "Perplexing",
+"Quaint", "Radiant", "Sophisticated", "Transcendent", "Uplifting",
+"Vigilant", "Wily", "Yearnful", "Aromatic", "Buoyant",
+"Cold", "Delicate", "Exciting", "Fragile", "Gentle",
+"Heady", "Intelligent", "Juicy", "Kissing", "Loyal",
+"Mighty", "Nonchalant", "Ordinary", "Prominent", "Quick",
+"Raucous", "Sassy", "Thrilling", "Unusual", "Vast",
+"Wrinkled", "Xyloid", "Youthful", "Zephyr", "Acutely",
+"Bubbling", "Charming", "Diligent", "Energetic", "Fearful",
+"Grounded", "Humorous", "Intrepid", "Just", "Keen",
+"Liquid", "Mellow", "Notable", "Outrageous", "Persistent",
+"Quirky", "Rustic", "Studious", "Teasing", "Underdog",
+"Volatile", "Wacky", "Xenial", "Yielding", "Zany",
+"Accepting", "Benevolent", "Curious", "Diplomatic", "Eccentric",
+"Furious", "Grıyorious", "Hectic", "Idealistic", "Jubilant",
+"Kooky", "Lucid", "Magnificent", "Nurturing", "Outstanding",
+"Perceptive", "Qualitative", "Restless", "Subtle", "Thunderous",
+"Unique", "Virtuous", "Winding", "Exotic", "Youthful",
+"Zesty", "Abstruse", "Blissful", "Cautious", "Despondent",
+"Elated", "Fractured", "Gigantic", "Humbling", "Interstellar",
+"Joves", "Knotty", "Laudable", "Mortified", "Novel",
+"Oblivious", "Pungent", "Questionable", "Resilient", "Surreal",
+"Turbulent", "Uplifted", "Vengeful", "Wistful", "Xerophytic",
+"Yielding", "Zealous", "Amusing", "Baffling", "Calamitous",
+"Decisive", "Enigmatic", "Fabulous", "Gloomy", "Heady",
+"Incredible", "Juxtaposed", "Kicked", "Luminous", "Morose",
+"Nonchalant", "Opaque", "Precise", "Quaint", "Rambunctious",
+"Sincere", "Tenacious", "Unleashed", "Visual", "Wistful",
+"Ardent", "Boisterous", "Cranky", "Divine", "Efficious",
+"Formidable", "Generous", "Humorous", "Intelligent", "Jittery",
+"Keen-edged", "Lofty", "Mesmerizing", "Nostalgic", "Optimal",
+"Polarized", "Radiant", "Serene", "Tinkering", "Unyielding",
+"Visible", "Weighted", "Xeric", "Yawning", "Ziggurat",
+"Apocalyptic", "Brilliant", "Chilly", "Devious", "Elusive",
+"Frigid", "Gracious", "Hair-raising", "Irrelevant", "Jumpy",
+"Knotty", "Looked", "Misty", "Neglected", "Overlapping",
+"Precvious", "Quiver", "Reviving", "Solar", "Transient",
+"Urgent", "Vivid", "Wadded", "Astonishing", "Breathless",
+"Candid", "Desolate", "Eccentric", "Fleeting", "Grateful",
+"Honest", "Inspiring", "Joyful", "Kooky", "Light-hearted",
+"Mysterious", "Nostalgic", "Obscure", "Pensive", "Quiet",
+"Reserved", "Sincere", "Tender", "Urgent", "Vulnerable",
+"Whimsical", "Xenophobic", "Yonder", "Zealot", "Amicable",
+"Benevolent", "Cunning", "Delightful", "Elegant", "Fantastic",
+"Great", "Hilarious", "Indomitable", "Joyous", "Kind-hearted",
+            // Добавьте больше прилагательных
+        ];
+ 
+        const nouns = [
+            "Wolf", "Dragon", "Eagle", "Knight", "Shadow",
+"Phoenix", "Tiger", "Viking", "Assassin", "Wizard",
+"Hunter", "Titan", "Reaper", "Sorcerer", "Gladiator",
+"Guardian", "Berserker", "Rogue", "Paladin", "Cyclone",
+"Storm", "Wraith", "Demon", "Warrior", "Beast",
+"Specter", "Titan", "Ninja", "Oracle", "Viper",
+"Fury", "Scorpion", "Griffin", "Basilisk", "Hawk",
+"Thorn", "Cheetah", "Falcon", "Sphinx", "Slayer",
+"Phoenix", "Hunter", "Titan", "Bear", "Saw",
+"Shaman", "Monk", "Jester", "Ghost", "Witch",
+"Crusader", "Enchanter", "Necromancer", "Assassin", "Marauder",
+"Troll", "Mermaid", "Banshee", "Valkyrie", "Ogre",
+"Chimera", "Golem", "Druid", "Elemental", "Ranger",
+"Sentinel", "Avatar", "Frost", "Vortex", "Battlemage",
+"Valkyrie", "Ghost", "Vampire", "Huntress", "Paragon",
+"Phoenix", "Slinger", "Stormblade", "Direwolf", "Rogue",
+"Steel", "Blitz", "Mantis", "Raider", "Scourge",
+"Tempest", "Warden", "Deathbringer", "Guardian", "Double",
+"Knave", "Knight", "Fallen", "Blade", "Prowler",
+"Whisper", "Strike", "Shade", "Phantom", "Eclipse",
+"Frostbite", "Thunder", "Inferno", "Stalker", "Revenant",
+"Onyx", "Ender", "Vortex", "Ember", "Vanguard",
+"Gladiator", "Saber", "Chaos", "Havoc", "Executor",
+"Crimson", "Dusk", "Nightshade", "Cipher", "Fury",
+"Venom", "Flame", "Raptor", "Drake", "Infernal",
+"Spectral", "Sorcery", "Jungle", "Rogue", "Renegade",
+"Horizon", "Dagger", "Fighter", "Anarchist", "Savage",
+"Butcher", "Desolation", "Dark", "Mystic", "Fabled",
+"Hellion", "Dragonborn", "Royal", "Rune", "Helmet",
+"Conqueror", "Dreadspire", "Night", "Lightning", "Cultivator",
+"Phantasm", "Peril", "Isolation", "Armadillo", "Blizzard",
+"Silence", "Phalanx", "Battler", "March", "Silver",
+"Frost", "Shroud", "Seer", "Bishop", "Savior",
+"Rumble", "Rampage", "Tempest", "Stormcaller", "Executioner",
+"Vulcan", "Quicksilver", "Dynamo", "Wraith", "Raider",
+"Shuriken", "Zodiac", "Legion", "Warlock", "Marquess",
+"Shogun", "Element", "Doom", "Chaosrunner", "Paint",
+"Silhouette", "Paladin", "Grit", "Fantasia", "Bravo",
+"Champion", "Reaper", "Claw", "Verdant", "Nightfall",
+"Spectator", "Flicker", "Gale", "Horizon", "Conjuror",
+"Grizzly", "Challenger", "Dusk", "Pioneer", "Grim",
+"Matador", "Defender", "Gamer", "Intrepid", "Maverick",
+"Stalwart", "Enigma", "Blaze", "Titanium", "Strider",
+"Invictus", "Infinity", "Frenzy", "Avenger", "Skybreaker",
+"Outrider", "Ranger", "Corvus", "Thunderous", "Shade",
+"Emperor", "Knightmare", "Spectre", "Prowler", "Blackout",
+"Trekker", "Vigilant", "Crimson", "Exile", "Zephyr",
+"Foreboding", "Champion", "Winner", "Journeyman", "Highlander",
+"Outlaw", "Nomad", "Warrior", "Brawler", "Bishop",
+"Generosity", "Gryphon", "Valor", "Wraith", "Element",
+"Griffin", "Saber", "Stingray", "Siren", "Omega",
+"Sphinx", "Juggernaut", "Omni", "Wilder", "Xeno",
+"Kyrie", "Zenith", "Crown", "Ace", "Warwind",
+"Exarch", "Apollo", "Horizon", "Edge", "Veil",
+"Frontier", "Oracle", "Wanderer", "Shaman", "Venator",
+"Kraken", "Zealot", "Nimbus", "Oracle", "Avatar",
+"Darkstar", "Ravi", "Dawn", "Archer", "Bolt",
+"Frostwing", "Destiny", "Fulgor", "Aurora", "Falcon",
+"Knight", "Tempest", "Ursus", "Hydra", "Ironheart",
+"Firestorm", "Jewel", "Sparrow", "Silverwing", "Spectral",
+"Vapor", "Sonata", "Nebula", "Shogun", "Rogue",
+"Pegasus", "Doom", "Mirage", "Legacy", "Aphelion",
+"Zodiac", "Chimera", "Rex", "Griffin", "Seer",
+"Valley", "Jetstream", "Peacemaker", "Mistral", "Finch",
+"Terminator", "Saber", "Obsidian", "Bulwark", "Crimson",
+"Darkblade", "Raven", "Jovial", "Dagger", "Thunderstrike",
+"Starblazer", "Whirlwind", "Protector", "Oblivion", "Abyss",
+"Elysium", "Resolute", "Sunder", "Aura", "Drake",
+"Archer", "Raven", "King", "Axe", "Wolf",
+"Blade", "Eclipse", "Enigma", "Ghost", "Hunter",
+"Abyss", "Flame", "Celestial", "Journey", "Bladesinger",
+"Heart", "Wraith", "Specter", "Warlock", "Valkyrie",
+"Glitch", "Havoc", "Majesty", "Archer", "Oracle",
+"Predator", "Nightmare", "Overlord", "Battler", "Jester",
+"Medic", "Renegade", "Adepts", "Nighthawk", "Doomsayer",
+"Rogue", "Shooter", "Runesmith", "Emperor", "Worldbreaker",
+"Negator", "Destiny", "Freestyle", "Cleric", "Dreadlord",
+"Pied", "Knightmare", "Spirit", "Truth", "Shade",
+"Nemesis", "Zombie", "Sphinx", "Paladin", "Enigma",
+"Seeker", "Warrior", "Ironclad", "Commander", "Duelist",
+"Quicksilver", "Dreadwind", "Resolute", "Fearless", "Warshaper",
+"Night", "Tempest", "Hero", "Savior", "Wraith",
+"Havoc", "Trickster", "Titan", "Maverick", "Nightfall",
+"Freeman", "Jewel", "Nomad", "Feral", "Warrior",
+"Traitor", "Lynx", "Perdition", "Illuminator", "Titan",
+"Tide", "Rampart", "Wind", "Guardian", "Void",
+"Impasse", "Monster", "Magical", "Exemplar", "Phantom",
+"Veritas", "Vortex", "Blacksmith", "Griffin", "Frost",
+"Lynx", "Stealth", "Windrunner", "Quickstep", "Spartacus",
+"Calamity", "Wisdom", "Wrath", "Serpent", "Havoc",
+"Harbinger", "Bern", "Sorcerer", "Mindstorm", "Roadrunner",
+"Tide", "Tranquil", "Aurora", "Ravager", "Requiem",
+"Champion", "Regression", "Legend", "Skyfire", "Zenith",
+"Frost", "Error", "Seeker", "Titan", "Seraph",
+"Viking", "Legendary", "Hack", "Drifter", "Phoenix",
+"Aragorn", "Archer", "Butterfly", "Egg", "Fizz",
+"Gem", "Helius", "Hitcher", "Culture", "Juju",
+"Kombat", "Laughter", "Mortal", "Noble", "Oldboy",
+"Plaza", "Queue", "Ray", "Supernova", "Tornado",
+"Unicorn", "Void", "Whisper", "Xerox", "Yeti",
+"Zephyr", "Fusion", "1871", "Dagger", "Rider",
+"Vanguard", "Thorn", "Paragon", "Relic", "Cub",
+"Artifact", "Blight", "Chase", "Cunning", "Epic",
+"Primal", "Droid", "Infernal", "Forger", "Gambit",
+"Helix", "Hurricane", "Incubus", "Jettison", "Karma",
+"Limit", "Mine", "Nightfall", "Oblivion", "Pivot",
+"Quantum", "Relic", "Specter", "Unravel", "Vortex",
+"Wonder", "Zodiac", "Flare", "Ghost", "Hunter",
+"Wraith", "Jettison", "Backdrop", "Destiny", "Vigil",
+"Classic", "Simplistic", "Power", "Clutch", "Overdrive",
+            // Добавьте больше существительных
+        ];
+ 
+        function generateNickname() {
+            const randomAdjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+            const randomNoun = nouns[Math.floor(Math.random() * nouns.length)];
+            const randomNum = Math.floor(Math.random() * 1000); // Число от 0 до 999
+ 
+            const nickname = `${randomAdjective}${randomNoun}${randomNum}`;
+            document.getElementById("nickname").innerText = nickname;
+            document.getElementById("copyButton").style.display = "inline-block"; // Показываем кнопку копирования
+        }
+ 
+        function copyNickname() {
+            const nickname = document.getElementById("nickname").innerText;
+            navigator.clipboard.writeText(nickname).then(() => {
+                alert("Nickname copied: " + nickname);
+            });
+        }
+    </script>
+</body>
+</html>
